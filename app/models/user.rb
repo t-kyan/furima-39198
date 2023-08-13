@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable
+         :recoverable, :rememberable, :validatable
 
   with_options presence: true do
     validates :nickname
@@ -11,10 +11,8 @@ class User < ApplicationRecord
     validates :last_name_kana, format: {with: /\A[ァ-ヶー－]+\z/ }
     validates :first_name_kana, format: {with: /\A[ァ-ヶー－]+\z/ }
     validates :birth_date
-    validates :email, uniqueness: true,
-                      format: { with: /\A[^@\s]+@[^@\s]+\z/, message: "@を含む必要があります" }
-    validates :password, length: { minimum: 6 },
-                               format: { with: /\A(?=.*?[a-z])(?=.*?[\d])[a-z\d]+\z/i,
-                                         message: "は半角英数字混合で入力してください" }      
-  end     
+  end
+    validates :password, format: { 
+      with: /\A(?=.*?[a-z])(?=.*?[\d])[a-z\d]+\z/i,
+      message: "is invalid. Include both letters and numbers" }          
 end
