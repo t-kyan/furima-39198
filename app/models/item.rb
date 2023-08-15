@@ -1,7 +1,7 @@
 class Item < ApplicationRecord
   has_one_attached :image
   belongs_to :user
-  
+
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to :category
   belongs_to :item_condition
@@ -21,7 +21,7 @@ class Item < ApplicationRecord
     validates :price
   end
 
-  with_options numericality: { other_than: 1 } do
+  with_options numericality: { other_than: 1 , message: "can't be blank"} do
     validates :category_id
     validates :item_condition_id
     validates :shipping_cost_id
