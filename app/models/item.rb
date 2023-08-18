@@ -13,19 +13,16 @@ class Item < ApplicationRecord
     validates :image 
     validates :name
     validates :description 
-    validates :category_id
-    validates :item_condition_id 
-    validates :shipping_cost_id 
-    validates :prefecture_id
-    validates :shipping_date_id
-    validates :price
   end
 
-  with_options numericality: { other_than: 1 , message: "can't be blank"} do
+  with_options numericality: { other_than: 1 , message: "can't be blank" } do
     validates :category_id
     validates :item_condition_id
     validates :shipping_cost_id
     validates :prefecture_id
     validates :shipping_date_id
   end
+
+  validates :price, presence: true, format: { with:  /\A[0-9]+\z/, message:"is invalid. Input half-width characters" },
+                    numericality: {greater_than_or_equal_to: 300, less_than_or_equal_to: 9999999, message:"is out of setting range"}
 end
