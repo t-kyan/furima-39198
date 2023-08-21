@@ -3,7 +3,6 @@ class ItemsController < ApplicationController
 
   def index
     @items = Item.all.order('created_at DESC')
-    @shipping_costs = ShippingCost.all
   end
 
   def new
