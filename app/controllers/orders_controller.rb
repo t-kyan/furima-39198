@@ -12,21 +12,23 @@ class OrdersController < ApplicationController
   def create
     @order_delivery = OrderDelivery.new(order_params)
     @item = Item.find(params[:item_id])
-    if current_user != @item.user
-      if @order_delivery.valid?
-        pay_item
-        @order_delivery.save
-        redirect_to root_path
-      else
-        render :index
-      end
+    return unless current_user != @item.user
+
+    if @order_delivery.valid?
+      pay_item
+      @order_delivery.save
+      redirect_to root_path
+    else
+      render :index
     end
   end
 
   private
 
   def order_params
-    params.require(:order_delivery).permit(:postal_code, :prefecture_id, :city, :address, :building, :phone_number).merge(user_id: current_user.id, item_id: params[:item_id], token: params[:token])
+    params.require(:order_delivery).permit(:postal_code, :prefecture_id, :city, :address, :building, :phone_number).merge(
+      user_id: current_user.id, item_id: params[:item_id], token: params[:token]
+    )
   end
 
   def pay_item
@@ -37,5 +39,4 @@ class OrdersController < ApplicationController
       currency: 'jpy'                # 通貨の種類（日本円）
     )
   end
-
 end
