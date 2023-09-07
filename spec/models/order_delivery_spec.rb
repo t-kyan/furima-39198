@@ -20,11 +20,6 @@ RSpec.describe OrderDelivery, type: :model do
     end
 
     context '内容に問題がある場合' do
-      it 'tokenが空では登録できないこと' do
-        @order_delivery.token = nil
-        @order_delivery.valid?
-        expect(@order_delivery.errors.full_messages).to include("Token can't be blank")
-      end
       it 'postal_codeが空だと保存ができない' do
         @order_delivery.postal_code = ''
         @order_delivery.valid?
@@ -32,6 +27,8 @@ RSpec.describe OrderDelivery, type: :model do
       end
       it 'postal_codeが半角のハイフンを含んだ正しい形式でないと保存ができない' do
         @order_delivery.postal_code = '1234567'
+        @order_delivery.valid?
+        expect(@order_delivery.errors.full_messages).to include("Postal code is invalid")
       end
       it 'prefectureを選択していないと保存できない' do
         @order_delivery.prefecture_id = '1'
@@ -67,6 +64,21 @@ RSpec.describe OrderDelivery, type: :model do
         @order_delivery.phone_number = '０９０５６７８１２３４'
         @order_delivery.valid?
         expect(@order_delivery.errors.full_messages).to include('Phone number is invalid')
+      end
+      it 'tokenが空では登録できないこと' do
+        @order_delivery.token = nil
+        @order_delivery.valid?
+        expect(@order_delivery.errors.full_messages).to include("Token can't be blank")
+      end
+      it 'userが紐付いていなければ購入できない' do
+        @order_delivery.user_id = nil
+        @order_delivery.valid?
+        expect(@order_delivery.errors.full_messages).to include("User can't be blank")
+      end
+      it 'itemが紐付いていなければ購入できない' do
+        @order_delivery.item_id = nil
+        @order_delivery.valid?
+        expect(@order_delivery.errors.full_messages).to include("Item can't be blank")
       end
     end
   end
