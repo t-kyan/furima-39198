@@ -63,4 +63,4 @@
 |phone_number  |string     |null: false                   |
 
 ### Association
-belongs_to :order
+- belongs_to :order
