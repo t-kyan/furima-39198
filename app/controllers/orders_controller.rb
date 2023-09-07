@@ -11,8 +11,6 @@ class OrdersController < ApplicationController
 
   def create
     @order_delivery = OrderDelivery.new(order_params)
-    return unless current_user != @item.user
-
     if @order_delivery.valid?
       pay_item
       @order_delivery.save
